@@ -1,4 +1,4 @@
-#YelpPymongo.py pymongo
+#YelpPymongo.py 
 
 
 from pymongo import MongoClient
@@ -11,7 +11,7 @@ client = MongoClient()
 #Setting context to new yelp database 
 db = client.yelp
 
-d = db.reviews.find({'business_id': 'ADD HERE'})
+d = db.reviews.find({'business_id': 'LM71VvmoAWDD5z8h7XoVig'})
 counter = 0
 for n in d:
     print(n)
