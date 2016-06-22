@@ -1,9 +1,7 @@
 #YelpPymongo.py pymongo
 
 
-import requests
 from pymongo import MongoClient
-import json
 
 
 #This lets pymongo about the connection we want to use, local host in our case
