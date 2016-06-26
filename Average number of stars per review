@@ -1,0 +1,26 @@
+#you can use the code below to find the average number of stars of a restuaurant
+
+import nltk
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+from pymongo import MongoClient
+client = MongoClient()
+
+db = client.yelp
+d = db.reviews.find({'business_id': '2SwC8wqpZC4B9iFVTgYT9A'})
+
+stars = []
+counter = 0
+for n in d:
+    stars.append(int(n.get( u'stars')))
+    counter += 1
+summ = 0
+for num in stars:
+    summ+= num
+avg = summ/counter
+print(avg)
+
+    
+    
+
+
