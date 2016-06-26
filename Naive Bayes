@@ -1,0 +1,42 @@
+##This is some code for Naive Bayes on movie reviews from NLTK corpus
+##Might be useful if we can figure out how to apply it to the yelp data
+
+
+import nltk.classify.util
+from nltk.classify import NaiveBayesClassifier
+from nltk.corpus import movie_reviews
+
+def word_feats(words):
+    return dict([(word, True) for word in words])
+ 
+negids = movie_reviews.fileids('neg')
+posids = movie_reviews.fileids('pos')
+ 
+negfeats = [(word_feats(movie_reviews.words(fileids=[f])), 'neg') for f in negids]
+posfeats = [(word_feats(movie_reviews.words(fileids=[f])), 'pos') for f in posids]
+ 
+negcutoff = len(negfeats)*3/4
+poscutoff = len(posfeats)*3/4
+ 
+trainfeats = negfeats[:100] + posfeats[:100]
+testfeats = negfeats[50:] + posfeats[50:]
+print ("train on %d instances, test on %d instances" % (len(trainfeats), len(testfeats)))
+ 
+classifier = NaiveBayesClassifier.train(trainfeats)
+print ("accuracy:", nltk.classify.util.accuracy(classifier, testfeats))
+classifier.show_most_informative_features()
+
+##Output from above:
+##train on 200 instances, test on 1900 instances
+##accuracy: 0.7336842105263158
+##Most Informative Features
+##                     mess = True              neg : pos    =     12.3 : 1.0
+##                    worst = True              neg : pos    =      9.8 : 1.0
+##                     dull = True              neg : pos    =      8.3 : 1.0
+##                 terrific = True              pos : neg    =      7.0 : 1.0
+##                memorable = True              pos : neg    =      7.0 : 1.0
+##                    girls = True              neg : pos    =      7.0 : 1.0
+##                    share = True              pos : neg    =      7.0 : 1.0
+##                     poor = True              neg : pos    =      6.6 : 1.0
+##                excellent = True              pos : neg    =      6.6 : 1.0
+##                   nicely = True              pos : neg    =      6.3 : 1.0
