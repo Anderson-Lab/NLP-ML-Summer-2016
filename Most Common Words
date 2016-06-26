@@ -1,0 +1,43 @@
+#This is how you can take x number of reviews and see what the most common words are
+#set x by placing an int where it says INSERT HERE
+
+
+import nltk
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+from pymongo import MongoClient
+client = MongoClient()
+
+db = client.yelp
+d = db.reviews.find({'business_id': '2SwC8wqpZC4B9iFVTgYT9A'})
+
+counter = 0
+rev = []
+
+for review in d:
+    rev.append((review.get(u'text')))
+    counter+=1
+    if counter == INSERT HERE:
+        break
+
+
+#tokenizing
+all_words = word_tokenize(str(rev))
+
+#throwing out useless words
+stop_words = set(stopwords.words("english"))
+words = []
+for wd in all_words:
+    if wd not in stop_words:
+        words.append(wd)
+
+for i in words:
+    if i=="," or i==":"or i=="." or i=="The"or i==" And" or "I":
+        words.remove(i)
+
+
+#frequency distribution
+restaurantOne =nltk.FreqDist(words)
+
+#most common words
+print(restaurantOne.most_common(20))
