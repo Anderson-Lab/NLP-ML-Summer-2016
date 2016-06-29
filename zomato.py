@@ -78,6 +78,22 @@ class Zomato:
         #pprint(response.json())
         return response.json()
         
+    def getLocation_Details(self, entity_id, entity_type:
+        URL = [self.base_url, "location_details?", "entity_id=", str(entity_id), "&entity_type=", entity_type]
+        URL = "".join(URL)
+        header = {"User-agent": "curl/7.43.0", "Accept": "application/json", "user_key": self.key}
 
+        response = requests.get(URL, headers=header)
+        #pprint(response.json())
+        return response.json()
+
+    def getLocation_Details(self, entity_id, entity_type:
+        URL = [self.base_url, "location_details?", "entity_id=", str(entity_id), "&entity_type=", entity_type]
+        URL = "".join(URL)
+        header = {"User-agent": "curl/7.43.0", "Accept": "application/json", "user_key": self.key}
+
+        response = requests.get(URL, headers=header)
+        #pprint(response.json())
+        return response.json()
 
 
