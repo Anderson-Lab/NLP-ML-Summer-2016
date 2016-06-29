@@ -1,0 +1,50 @@
+#Print newsgroups categories (20)
+print ('Newsgroup Categories:')
+from sklearn.datasets import fetch_20newsgroups
+twenty_train = fetch_20newsgroups(subset='train', shuffle=False, random_state=42)
+print("\n",twenty_train.target_names,"\n")
+
+#Print a record from the dataset
+print("\n".join(twenty_train.data[600].split("\n")))
+
+#Print the newsgroup category the record belongs to
+print('Newsgroup Category:', twenty_train.target_names[twenty_train.target[600]], '\n')
+
+#prints the target_names (numerical values) for the first 10 records
+print(twenty_train.target[:10], '\n')
+#prints the target_names (text names)
+for t in twenty_train.target[:10]:
+    print(twenty_train.target_names[t])
+print('\n')
+
+#CountVectorizer - Text preprocessing, tokenizing and filtering of stopwords
+#are included in a high level component that is able to build a dictionary of
+#features and transform documents to feature vectors
+from sklearn.feature_extraction.text import CountVectorizer
+count_vect = CountVectorizer()
+count_vect.fit_transform(twenty_train.data)
+count_vect.vocabulary_.get(u'algorithm')
+
+#TfIdfTranformer - Term Frequency times Inverse Document Frequency
+#downscale weights for words that occur in many documents in the corpus and
+#are therefore less informative than those that occur only in a smaller portion
+#of the corpus
+from sklearn.feature_extraction.text import TfidfTransformer
+tf_transformer = TfidfTransformer(use_idf=False).fit(count_vect.fit_transform(twenty_train.data))
+X_train_tf = tf_transformer.transform(count_vect.fit_transform(twenty_train.data))
+tfidf_transformer = TfidfTransformer()
+X_train_tfidf = tfidf_transformer.fit_transform(count_vect.fit_transform(twenty_train.data))
+
+#Naive Bayes Classifier
+from sklearn.naive_bayes import MultinomialNB
+clf = MultinomialNB().fit(tf_transformer.transform(count_vect.fit_transform(twenty_train.data)), twenty_train.target)    
+
+docs_new = ['God is love', 'all widgets in an application']
+count_vect.transform(docs_new)
+tfidf_transformer.transform(count_vect.transform(docs_new))
+
+predicted = clf.predict(tfidf_transformer.transform(count_vect.transform(docs_new)))
+#Print category prediction for new docs
+print('Newsgroup Category predictions: ')
+for doc, category in zip(docs_new, predicted):
+    print('%r => %s' % (doc, twenty_train.target_names[category]))
