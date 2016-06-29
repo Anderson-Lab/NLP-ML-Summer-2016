@@ -1,0 +1,58 @@
+import nltk
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+from pymongo import MongoClient
+client = MongoClient()
+
+db = client.yelp
+d = db.reviews.find({'business_id': '2SwC8wqpZC4B9iFVTgYT9A'})
+
+counter = 0
+rev = []
+
+#Get text from reviews
+for review in d:
+    rev.append((review.get(u'text')))
+    counter+=1
+    if counter == 200:
+        break
+
+#tokenizing
+all_words = word_tokenize(str(rev))
+
+
+#frequency distribution
+restaurantOne =nltk.FreqDist(all_words)
+
+
+
+#Number of occurences of certain words
+print "Occurences of Positive words"
+print "Great: ", restaurantOne["great"]
+print "Good: ", restaurantOne["good"]
+print "Nice: ", restaurantOne["nice"]
+print "Amazing: ", restaurantOne["amazing"]
+print "Great: ", restaurantOne["great"]
+print "Delicious: ", restaurantOne["delicious"]
+print "Best: ", restaurantOne["best"]
+
+print "Occurences of Negative words: "
+print "Bad: ", restaurantOne["bad"]
+print "Terrible: ", restaurantOne["terrible"]
+print "Horrible: ", restaurantOne["horrible"]
+print "Worst: ", restaurantOne["worst"]
+print "Awful: ", restaurantOne["awful"]
+
+#Average number of stars
+stars = []
+counter = 0
+for n in d:
+    stars.append(int(n.get( u'stars')))
+    counter += 1
+sum = 0
+for num in stars:
+    sum+= num
+avg = sum/counter
+print "Average number of Stars (Out of 5): ", avg
+
+
