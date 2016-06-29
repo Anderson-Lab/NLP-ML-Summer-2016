@@ -1,0 +1,7 @@
+from nltk.tokenize import sent_tokenize, PunktSentenceTokenizer
+from nltk.corpus import gutenberg
+
+sample = gutenberg.raw("shakespeare-macbeth.txt")
+tok = sent_tokenize(sample)
+for x in range(20):
+    print(tok[x])
