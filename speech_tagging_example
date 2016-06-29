@@ -1,0 +1,11 @@
+import nltk
+
+#This example labels words as nouns, adj, adverb, ect.
+
+text = word_tokenize("This is my speech tagging example.")
+nltk.pos_tag(text)
+
+text = nltk.Text(word.lower() for word in nltk.corpus.brown.words())
+text.similar('woman')
+text.similar('and')
+text.similar('bought')
