@@ -1,0 +1,16 @@
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+
+liz_example = "This is a sample sentence, showing off the stop words filtration."
+
+stop_words = set(stopwords.words('english'))
+token_sent = word_tokenize(liz_example)
+filtered_sent = [w for w in token_sent if not w in stop_words]
+filtered_sent = []
+
+for w in token_sent:
+    if w not in stop_words:
+        filtered_sent.append(w)
+        
+print(token_sent)
+print(filtered_sent)
