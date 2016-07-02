@@ -1,0 +1,37 @@
+#Number of stars and correlating dates
+
+import nltk
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+from pymongo import MongoClient
+
+client = MongoClient()
+
+db = client.yelp
+d = db.reviews.find({'business_id': '2SwC8wqpZC4B9iFVTgYT9A'})
+
+dates = []
+stars = []
+counter = 0
+for n in d:
+    dates.append(n.get(u'date'))
+    stars.append(int(n.get( u'stars')))
+    counter += 1
+
+stars.sort()
+
+for date, star in zip(dates, stars):
+    #print "On the date: ",date, "your restaurant received ", star, " stars."    
+    
+    #print date, star
+    if star == 1:
+        print "Dates with 1 Star:", date
+    if star == 2:
+        print "Dates with 2 Stars:", date
+    if star == 3:
+        print "Dates with 3 Stars:", date
+    if star == 4:
+        print "Dates with 4 Stars:", date
+    if star == 5:
+        print "Dates with 5 Stars:", date
+
