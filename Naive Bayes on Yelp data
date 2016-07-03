@@ -1,0 +1,47 @@
+import nltk
+import nltk.classify.util
+from nltk.classify import NaiveBayesClassifier
+
+#This lets pymongo about the connection we want to use, local host in our case
+client = MongoClient()
+
+#Setting context to new yelp database 
+db = client.yelp
+
+d = db.reviews.find({'business_id': 'KayYbHCt-RkbGcPdGOThNg','business_id': 'mVHrayjG3uZ_RLHkLj-AMg'})
+count = 0
+for n in d:
+    count += 1
+print (count)
+    
+train = []
+counter = 0
+for n in d:
+    train.append(n.get(u'business_id',u'text'))
+    counter += 1
+
+from sklearn.feature_extraction.text import CountVectorizer
+count_vect = CountVectorizer()
+count_vect.fit_transform(train.text)
+count_vect.vocabulary_.get(u'algorithm')
+
+from sklearn.feature_extraction.text import TfidfTransformer
+tf_transformer = TfidfTransformer(use_idf=False).fit(count_vect.fit_transform(train.text))
+X_train_tf = tf_transformer.transform(count_vect.fit_transform(train.text))
+tfidf_transformer = TfidfTransformer()
+X_train_tfidf = tfidf_transformer.fit_transform(count_vect.fit_transform(train.text))
+
+#Naive Bayes Classifier
+from sklearn.naive_bayes import MultinomialNB
+clf = MultinomialNB().fit(tf_transformer.transform(count_vect.fit_transform(train.text)), train.business_id)    
+
+docs_new = ['sandwich', 'best value']
+count_vect.transform(docs_new)
+tfidf_transformer.transform(count_vect.transform(docs_new))
+
+predicted = clf.predict(tfidf_transformer.transform(count_vect.transform(docs_new)))
+#Print category prediction for new docs
+print('Restaurant predictions: ')
+for doc, category in zip(docs_new, predicted):
+    print('%r => %s' % (doc, train.business_id[category]))
+
